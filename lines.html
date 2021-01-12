@@ -45,51 +45,45 @@
             {
                 'points': [
                     {
-                        'lng': '116.387112',
-                        'lat': '39.920977'
+                        'lngs': '116.387112',
+                        'lats': '39.920977',
+                        'time':'2021-01-12 22:08:43'
                     },
                     {
-                        'lng': '116.385243',
-                        'lat': '39.073449'
-                    },
-                    {
-                        'lng': '116.394226',
-                        'lat': '39.917988'
-                    },
-                    {
-                        'lng': '116.401772',
-                        'lat': '39.921364'
-                    },
-                    {
-                        'lng': '116.41248',
-                        'lat': '39.927893'
+                        'lngs': '116.41248',
+                        'lats': '39.927893',
+                        'time': '2021-01-13 22:08:43'
                     }
                 ]
             },
             {
                 'points': [
                     {
-                        'lng': '116.342868',
-                        'lat': '40.07897'
+                        'lngs': '116.342868',
+                        'lats': '40.07897',
+                        'time': '2021-01-16 22:08:43'
                     },
                     {
-                        'lng': '116.344659',
-                        'lat': '40.073449'
+                        'lngs': '116.344659',
+                        'lats': '40.073449',
+                        'time': '22222222'
                     },
                     {
-                        'lng': '116.351558',
-                        'lat': '40.077369'
+                        'lngs': '116.351558',
+                        'lats': '40.077369',
+                        'time': '222222222'
                     },
                     {
-                        'lng': '116.401772',
-                        'lat': '40.921364'
+                        'lngs': '116.401772',
+                        'lats': '40.921364',
+                        'time': '2021-01-22 22:08:43'
                     }
                 ]
             },
         ]
         var styleOptions = {
             strokeColor: 'red',
-            strokeWeight: 6,
+            strokeWeight: 10,
             strokeOpacity: 0.5
         }
         showPolygon(list)
@@ -98,13 +92,24 @@
                 var listArr = points[i]
                 var point = []
                 for (var j = 0, pointsLen = listArr.points.length; j < pointsLen; j++) {
-                    point[j] = new BMap.Point(listArr.points[j].lng, listArr.points[j].lat)
+                    point[j] = new BMap.Point(listArr.points[j].lngs, listArr.points[j].lats)
                     if (j == 0 || j == listArr.points.length - 1) {//起点终点图标
-                        map.addOverlay(new BMap.Marker(new BMap.Point(listArr.points[j].lng, listArr.points[j].lat)));
+                        map.addOverlay(new BMap.Marker(new BMap.Point(listArr.points[j].lngs, listArr.points[j].lats)));
                     }
                 }
-                var polygon = new BMap.Polyline(point, styleOptions);  //创建多边形
+                var polygon = new BMap.Polyline(point, styleOptions); 
                 map.addOverlay(polygon);
+                
+                (function (point, starTime, endTime) {
+                    polygon.onclick = function (e) {   
+                        var opts = {
+                            width: 300,
+                            height: 100
+                        }
+                        var infoWindow = new BMap.InfoWindow("<div>出发时间："+ starTime.time +"</div><div>到达时间："+ endTime.time +"</div>", opts);                 
+                        map.openInfoWindow(infoWindow, e.point);
+                    }
+                })(point, listArr.points[0], listArr.points[listArr.points.length-1]);
             }
         }
     </script>
